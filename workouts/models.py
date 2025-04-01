@@ -1,4 +1,5 @@
 from django.db import models
+from django.conf import settings
 
 class Exercise(models.Model):
     name = models.CharField(max_length=100)
@@ -9,7 +10,7 @@ class Exercise(models.Model):
         return self.name
     
 class Plan(models.Model):
-    # user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
     description = models.TextField(blank=True)
     exercises = models.ManyToManyField(Exercise, blank=True)
@@ -18,7 +19,7 @@ class Plan(models.Model):
         return f"{self.name} (by {self.user.username})"
 
 class WorkoutSession(models.Model):
-    # user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     plan = models.ForeignKey(Plan, on_delete=models.SET_NULL, null=True, blank=True)
     date = models.DateField()
     notes = models.TextField(blank=True)
